@@ -41,8 +41,8 @@ export async function POST(req) {
     const lastMessageContent = lastMessage.content + resultString
     const lastDataWithoutLastMessage = data.slice(0, data.length - 1)
 
-    const model = genAI.GenerativeModel("gemini-1.5-flash")
-    const completion = model.start_chat(
+    const genai = genAI.GenerativeModel("gemini-1.5-flash")
+    const completion = genai.start_chat(
         history=[
             {"role": "model", "parts": systemPrompt},
             ...lastDataWithoutLastMessage,
@@ -51,7 +51,7 @@ export async function POST(req) {
         stream = true,
     )
 
-    const stream = new ReadableStream({
+    const resultStream = new ReadableStream({
         async start(controller) {
           const encoder = new TextEncoder()
           try {
@@ -69,6 +69,6 @@ export async function POST(req) {
           }
         },
       })
-      return new NextResponse(stream)
+      return new NextResponse(resultStream)
 
   }
