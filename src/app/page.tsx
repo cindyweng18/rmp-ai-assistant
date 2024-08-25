@@ -1,133 +1,223 @@
-'use client'
-import { Box, Button, Stack, TextField } from '@mui/material'
-import { useState, useEffect } from 'react'  
-import { useAuth } from './hooks/useAuth'
-import { useRouter } from 'next/navigation'  
+"use client";
+import {
+  AppBar,
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardActions,
+  CardContent,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
+import NavBar from "/src/app/navbar";
 
 export default function Home() {
-
-  const { user, loading } = useAuth()
-  const router = useRouter()
-
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: `Hi! I'm the Rate My Professor support assistant. How can I help you today?`,
-    },
-  ])
-  const [message, setMessage] = useState('')
-  const sendMessage = async () => {
-    setMessage('')
-    setMessages((messages) => [
-      ...messages,
-      {role: 'user', content: message},
-      {role: 'assistant', content: ''},
-    ])
-  
-    const response = fetch('/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([...messages, {role: 'user', content: message}]),
-    }).then(async (res) => {
-      const reader = res.body.getReader()
-      const decoder = new TextDecoder()
-      let result = ''
-  
-      return reader.read().then(function processText({done, value}) {
-        if (done) {
-          return result
-        }
-        const text = decoder.decode(value || new Uint8Array(), {stream: true})
-        setMessages((messages) => {
-          let lastMessage = messages[messages.length - 1]
-          let otherMessages = messages.slice(0, messages.length - 1)
-          return [
-            ...otherMessages,
-            {...lastMessage, content: lastMessage.content + text},
-          ]
-        })
-        return reader.read().then(processText)
-      })
-    })
-  }
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/signin')  // Redirect to sign-in page if not authenticated
-    }
-  }, [user, loading, router])
-
-  if (loading) {
-    return <p>Loading...</p>  // Show loading state while checking authentication
-  }
-
-  if (!user) {
-    return null  // Render nothing if not authenticated (to prevent flash of content)
-  }
-
-
-
   return (
-  <Box
-      width="100vw"
-      height="100vh"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-    >
-    <Stack
-      direction={'column'}
-      width="500px"
-      height="700px"
-      border="1px solid black"
-      p={2}
-      spacing={3}
-    >
-      <Stack
-        direction={'column'}
-        spacing={2}
-        flexGrow={1}
-        overflow="auto"
-        maxHeight="100%"
+    <>
+      <NavBar />
+      <Box
+        id="hero"
+        sx={{
+          backgroundImage: `url("/images/homepage.jpg")`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          height: { xs: "400px", sm: "450px", md: "700px", lg: "900px" },
+        }}
       >
-        {messages.map((message, index) => (
-          <Box
-            key={index}
-            display="flex"
-            justifyContent={
-              message.role === 'assistant' ? 'flex-start' : 'flex-end'
-            }
+        <Container
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Stack
+            spacing={2}
+            useFlexGap
+            sx={{
+              height: { xs: "100%", sm: "100%" },
+              width: { xs: "80%", sm: "40%", lg: "35%" },
+              mt: { xs: 10, sm: 10, md: 30, lg: 40 },
+              mb: { xs: 5, sm: 12 },
+              backgroundColor: "#FFFFFF",
+              border: "#0C232B solid 4px",
+              borderRadius: 10,
+            }}
           >
-            <Box
-              bgcolor={
-                message.role === 'assistant'
-                  ? 'primary.main'
-                  : 'secondary.main'
-              }
-              color="white"
-              borderRadius={16}
-              p={3}
+            <Typography
+              variant="h1"
+              sx={{
+                color: "#2F5662",
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                alignSelf: "center",
+                textAlign: "center",
+                fontSize: "clamp(3.5rem, 10vw, 4rem)",
+                fontWeight: "bold",
+                mt: 2,
+              }}
             >
-              {message.content}
-            </Box>
-          </Box>
-        ))}
-      </Stack>
-      <Stack direction={'row'} spacing={2}>
-        <TextField
-          label="Message"
-          fullWidth
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <Button variant="contained" onClick={sendMessage}>
-          Send
-        </Button>
-      </Stack>
-    </Stack>
-  </Box>
+              Prof
+              <Typography
+                component="span"
+                variant="h1"
+                sx={{
+                  fontSize: "clamp(3rem, 10vw, 4rem)",
+                  color: "#FF745A",
+                  fontWeight: "bold",
+                }}
+              >
+                Match
+              </Typography>
+            </Typography>
+            <Typography
+              textAlign="center"
+              color="text.secondary"
+              sx={{ alignSelf: "center", width: { sm: "100%", md: "80%" } }}
+            >
+              Let our AI make the match of the semester!
+            </Typography>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              alignSelf="center"
+              spacing={1}
+              useFlexGap
+              sx={{ pt: 2, width: { xs: "80%", sm: "auto" } }}
+            >
+              <Button
+                variant="contained"
+                href="/signup"
+                sx={{
+                  mb: 2,
+                  backgroundColor: "#2F5662",
+                  "&:hover": {
+                    backgroundColor: "#FF745A", // Prevent hover background color change
+                  },
+                }}
+              >
+                Get Started
+              </Button>
+            </Stack>
+          </Stack>
+        </Container>
+      </Box>
+      <Container
+        id="features"
+        sx={{
+          pt: { xs: 4, sm: 12 },
+          pb: { xs: 8, sm: 16 },
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: { xs: 3, sm: 6 },
+        }}
+      >
+        <Box
+          sx={{
+            width: { sm: "100%", md: "100%" },
+            textAlign: { sm: "left", md: "center" },
+          }}
+        >
+          <Typography
+            component="h2"
+            variant="h4"
+            color="text.primary"
+            gutterBottom
+          >
+            {" "}
+            Features{" "}
+          </Typography>
+          <Grid container spacing={5}>
+            <Grid item xs={12} sm={6} md={4} sx={{ display: "flex" }}>
+              <Card
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  flexGrow: 1,
+                  p: 1,
+                }}
+              >
+                <CardContent>
+                  <Typography
+                    color="text.primary"
+                    variant="body2"
+                    fontWeight="bold"
+                  >
+                    Smart Professor Matching
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Our AI-driven chatbot analyzes thousands of reviews and ratings from Rate
+                    My Professor to match you with the best professors for your
+                    courses.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} sx={{ display: "flex" }}>
+              <Card
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  flexGrow: 1,
+                  p: 1,
+                }}
+              >
+                <CardContent>
+                  <Typography
+                    color="text.primary"
+                    variant="body2"
+                    fontWeight="bold"
+                  >
+                    Comprehensive Professor Profiles
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                   Get detailed profiles of professors, including their strengths,
+                    weaknesses, and teaching methods, all sourced from authentic
+                    student reviews.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} sx={{ display: "flex" }}>
+              <Card
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  flexGrow: 1,
+                  p: 1,
+                }}
+              >
+                <CardContent>
+                  <Typography
+                    color="text.primary"
+                    variant="body2"
+                    fontWeight="bold"
+                  >
+                    Course Planning Assistance
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Our chatbot helps you plan your course
+                    schedule by identifying which professors are teaching the
+                    courses you need.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+      <Divider />
+    </>
   );
 }

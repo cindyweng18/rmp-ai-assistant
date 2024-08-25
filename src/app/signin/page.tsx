@@ -14,7 +14,7 @@ export default function SignIn() {
   const handleSignIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push('/')
+      router.push('/chatbox')
     } catch (error) {
       setError('Failed to sign in. Please check your credentials.');
     }
@@ -26,6 +26,7 @@ export default function SignIn() {
 
 
   return (
+    <>
     <Box
       width="100vw"
       height="100vh"
@@ -33,12 +34,22 @@ export default function SignIn() {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      sx={{
+        backgroundImage: `url("/images/register.jpg")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        height: "100vh",
+        width: "100%"
+      }}
     >
       <Box
         width="300px"
         p={3}
         border="1px solid black"
         borderRadius="8px"
+        sx={{
+          backgroundColor:"white",
+        }}
       >
         <TextField
           label="Email"
@@ -73,5 +84,6 @@ export default function SignIn() {
         </Button>
       </Box>
     </Box>
+    </>
   );
 }
