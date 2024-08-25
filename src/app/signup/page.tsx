@@ -29,12 +29,21 @@ export default function SignUp() {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      sx={{
+        backgroundImage: `url("/images/register.jpg")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        height: { xs: "400px", sm: "450px", md: "700px", lg: "900px" },
+      }}
     >
       <Box
         width="300px"
         p={3}
         border="1px solid black"
         borderRadius="8px"
+        sx={{
+          backgroundColor:"white",
+        }}
       >
         <TextField
           label="Email"
