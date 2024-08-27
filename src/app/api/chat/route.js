@@ -52,7 +52,6 @@ export async function POST(req) {
         try {
           for await (const chunk of result.stream) {
             const content = chunk.text()
-            
             if (content) {
               const text = encoder.encode(content)
               controller.enqueue(text)
