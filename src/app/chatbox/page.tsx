@@ -125,7 +125,7 @@ export default function Home() {
           sx={{
             backgroundColor: "white",
           }}
-          label="I'd like to know about professor..."
+          label="I go to ___ and want to find professors for ___."
           fullWidth
           value={message}
           onChange={(e) => setMessage(e.target.value)}

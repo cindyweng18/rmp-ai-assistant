@@ -1,5 +1,5 @@
 'use client'
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, TextField, Typography} from '@mui/material';
 import { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../lib/fireConfig'; // Adjust the import path if necessary
@@ -15,10 +15,14 @@ export default function SignUp() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       // Redirect or handle successful sign-up
-      router.push('/signin'); 
+      router.push('/chatbox'); 
     } catch (error) {
       setError('Failed to sign up. Please try again.');
     }
+  };
+
+  const handleSignInRedirect = () => {
+    router.push('/signin'); 
   };
 
   return (
@@ -34,8 +38,7 @@ export default function SignUp() {
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         height: { xs: "400px", sm: "450px", md: "700px", lg: "900px" },
-      }}
-    >
+      }}>
       <Box
         width="300px"
         p={3}
@@ -67,6 +70,15 @@ export default function SignUp() {
         >
           Sign Up
         </Button>
+        <Button
+          variant="outlined"
+          fullWidth
+          onClick={handleSignInRedirect}
+          sx={{ mt: 2 }} 
+        >
+          Log In
+        </Button>
+        <Typography textAlign={'center'} marginTop={1} fontSize={15}>Have an account? Login!</Typography>
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </Box>
     </Box>

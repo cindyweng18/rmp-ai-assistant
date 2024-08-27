@@ -1,5 +1,5 @@
 'use client'
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, TextField, Typography} from '@mui/material';
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../lib/fireConfig'; 
@@ -38,8 +38,7 @@ export default function SignIn() {
         backgroundImage: `url("/images/register.jpg")`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
-        height: "100vh",
-        width: "100%"
+        height: { xs: "400px", sm: "450px", md: "700px", lg: "900px" },
       }}
     >
       <Box
@@ -66,14 +65,16 @@ export default function SignIn() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        
         <Button
           variant="contained"
           fullWidth
           onClick={handleSignIn}
         >
-          Sign In
+          Log In
         </Button>
         {error && <p style={{ color: 'red' }}>{error}</p>}
+        
         <Button
           variant="outlined"
           fullWidth
@@ -82,6 +83,7 @@ export default function SignIn() {
         >
           Sign Up
         </Button>
+        <Typography textAlign={'center'} marginTop={1} fontSize={15}>Need an account? Sign Up!</Typography>
       </Box>
     </Box>
     </>
