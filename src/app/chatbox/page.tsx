@@ -98,15 +98,20 @@ export default function Home() {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      sx={{
+        backgroundImage: `url("/images/chatbox.jpg")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
     >
-      <Stack
-        direction="column"
-        width="500px"
-        height="700px"
-        border="1px solid black"
-        p={2}
-        spacing={3}
-      >
+
+    <Stack
+      direction={'column'}
+      width="500px"
+      height="700px"
+      p={2}
+      spacing={3}
+    >
         <Button variant="contained" onClick={uploadReviews}>
           Upload Review
         </Button>
@@ -119,40 +124,41 @@ export default function Home() {
         >
           {messages.map((message, index) => (
             <Box
+              bgcolor={
+                message.role === 'assistant'
+                  ? '#2F5662'
+                  : '#FF745A'
               key={index}
               display="flex"
               justifyContent={
                 message.role === "assistant" ? "flex-start" : "flex-end"
               }
             >
-              <Box
-                bgcolor={
-                  message.role === "assistant"
-                    ? "primary.main"
-                    : "secondary.main"
-                }
-                color="white"
-                borderRadius={16}
-                p={3}
-              >
                 {message.content}
               </Box>
             </Box>
-          ))}
-        </Stack>
-        <Stack direction="row" spacing={2}>
-          <TextField
-            label="Message"
-            fullWidth
-            value={message}
-            onChange={(e) => {
-              setMessage(e.target.value);
-            }}
-          />
-          <Button variant="contained" onClick={sendMessage}>
-            Send
-          </Button>
-        </Stack>
+          </Box>
+        ))}
+      </Stack>
+      <Stack direction={'row'} spacing={2}> 
+        <TextField
+          sx={{
+            backgroundColor: "white",
+          }}
+          label="I'd like to know about professor..."
+          fullWidth
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <Button variant="contained" onClick={sendMessage} 
+          sx={{
+            backgroundColor:"#2F5662",
+            "&:hover": {
+              backgroundColor: "#FF745A", // Prevent hover background color change
+            },
+          }}>
+          Send
+        </Button>
       </Stack>
     </Box>
   );
