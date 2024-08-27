@@ -76,19 +76,19 @@ export default function Home() {
     }
   }
 
-  // useEffect(() => {
-  //   if (!loading && !user) {
-  //     router.push('/signin')  // Redirect to sign-in page if not authenticated
-  //   }
-  // }, [user, loading, router])
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/signin')  // Redirect to sign-in page if not authenticated
+    }
+  }, [user, loading, router])
 
-  // if (loading) {
-  //   return <p>Loading...</p>  // Show loading state while checking authentication
-  // }
+  if (loading) {
+    return <p>Loading...</p>  // Show loading state while checking authentication
+  }
 
-  // if (!user) {
-  //   return null  // Render nothing if not authenticated (to prevent flash of content)
-  // }
+  if (!user) {
+    return null  // Render nothing if not authenticated (to prevent flash of content)
+  }
 
   return (
     <Box
