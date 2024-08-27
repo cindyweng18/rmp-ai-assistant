@@ -24,8 +24,6 @@ pc.create_index(
 data = json.load(open("reviews.json"))
 
 processed_data = []
-# model = genai.GenerativeModel('gemini-1.5-flash')
-# client = OpenAI()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Create embeddings for each review
@@ -33,12 +31,9 @@ for review in data["reviews"]:
     response = genai.embed_content(
         content=review['review'], 
         model="models/text-embedding-004")
-    # response = client.embeddings.create(
-    #     input=review['review'], model="text-embedding-3-small"
-    # )
+    
     embedding = response['embedding']
 
-    # embedding = response.data[0].embedding
     processed_data.append(
         {
             "values": embedding,

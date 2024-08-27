@@ -1,29 +1,30 @@
-'use client'
-import { Box, Button, Stack, TextField } from '@mui/material'
-import { useState, useEffect } from 'react'  
-import { useAuth } from '../hooks/useAuth'
-import { useRouter } from 'next/navigation'  
+"use client";
+import { TextField, Box, Stack, Button } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useAuth } from "../hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-
   const { user, loading } = useAuth()
   const router = useRouter()
-
   const [messages, setMessages] = useState([
     {
-      role: 'assistant',
-      content: `Hi! I'm the Rate My Professor support assistant. How can I help you today?`,
+      role: "assistant",
+      content:
+        "Hi! I am the Rate My Professor support assistant. How can I help you today?",
     },
-  ])
-  const [message, setMessage] = useState('')
+  ]);
+
+  const [message, setMessage] = useState("");
+
   const sendMessage = async () => {
-    setMessage('')
     setMessages((messages) => [
       ...messages,
-      {role: 'user', content: message},
-      {role: 'assistant', content: ''},
-    ])
-  
+      { role: "user", content: message },
+      { role: "assistant", content: "" },
+    ]);
+
+    setMessage("");
     const response = fetch('/api/chat', {
       method: 'POST',
       headers: {
@@ -31,13 +32,13 @@ export default function Home() {
       },
       body: JSON.stringify([...messages, {role: 'user', content: message}]),
     }).then(async (res) => {
-      const reader = res.body.getReader()
+      const reader = res.body!.getReader()
       const decoder = new TextDecoder()
       let result = ''
   
-      return reader.read().then(function processText({done, value}) {
+      return reader.read().then(async function processText({done, value}): Promise<any> {
         if (done) {
-          return result
+          return Promise.resolve(result)
         }
         const text = decoder.decode(value || new Uint8Array(), {stream: true})
         setMessages((messages) => {
@@ -51,6 +52,28 @@ export default function Home() {
         return reader.read().then(processText)
       })
     })
+  }
+
+  // For uploading reviews to pinecone index
+  async function uploadReviews() {
+    try {
+      const response = await fetch("/api/uploadreview", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error uploading reviews: ${response.status} ${errorText}`);
+      }
+
+      const result = await response.json();
+      console.log("Reviews uploaded successfully:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   useEffect(() => {
@@ -67,10 +90,8 @@ export default function Home() {
     return null  // Render nothing if not authenticated (to prevent flash of content)
   }
 
-
-
   return (
-  <Box
+    <Box
       width="100vw"
       height="100vh"
       display="flex"
@@ -83,6 +104,7 @@ export default function Home() {
         backgroundSize: "cover",
       }}
     >
+
     <Stack
       direction={'column'}
       width="500px"
@@ -90,32 +112,30 @@ export default function Home() {
       p={2}
       spacing={3}
     >
-      <Stack
-        direction={'column'}
-        spacing={2}
-        flexGrow={1}
-        overflow="auto"
-        maxHeight="100%"
-      >
-        {messages.map((message, index) => (
-          <Box
-            key={index}
-            display="flex"
-            justifyContent={
-              message.role === 'assistant' ? 'flex-start' : 'flex-end'
-            }
-          >
+        <Button variant="contained" onClick={uploadReviews}>
+          Upload Review
+        </Button>
+        <Stack
+          direction="column"
+          spacing={2}
+          flexGrow={1}
+          overflow="auto"
+          maxHeight="100%"
+        >
+          {messages.map((message, index) => (
             <Box
               bgcolor={
                 message.role === 'assistant'
                   ? '#2F5662'
                   : '#FF745A'
+              key={index}
+              display="flex"
+              justifyContent={
+                message.role === "assistant" ? "flex-start" : "flex-end"
               }
-              color="white"
-              borderRadius={16}
-              p={3}
             >
-              {message.content}
+                {message.content}
+              </Box>
             </Box>
           </Box>
         ))}
@@ -140,7 +160,6 @@ export default function Home() {
           Send
         </Button>
       </Stack>
-    </Stack>
-  </Box>
+    </Box>
   );
 }
