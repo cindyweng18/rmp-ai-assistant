@@ -2,7 +2,7 @@ import { AppBar, Box, Button, Container, Divider, Drawer, MenuItem, Toolbar, Typ
 import React from "react";
 
 export default function NavBar() {
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = (sectionId: string) => {
     const sectionElement = document.getElementById(sectionId);
     const offset = 128;
     if (sectionElement) {
