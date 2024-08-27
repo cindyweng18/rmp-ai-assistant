@@ -32,7 +32,7 @@ export default function Home() {
       },
       body: JSON.stringify([...messages, {role: 'user', content: message}]),
     }).then(async (res) => {
-      const reader = res.body.getReader()
+      const reader = res.body!.getReader()
       const decoder = new TextDecoder()
       let result = ''
   
