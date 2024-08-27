@@ -77,12 +77,16 @@ export default function Home() {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      sx={{
+        backgroundImage: `url("/images/chatbox.jpg")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
     >
     <Stack
       direction={'column'}
       width="500px"
       height="700px"
-      border="1px solid black"
       p={2}
       spacing={3}
     >
@@ -104,8 +108,8 @@ export default function Home() {
             <Box
               bgcolor={
                 message.role === 'assistant'
-                  ? 'primary.main'
-                  : 'secondary.main'
+                  ? '#2F5662'
+                  : '#FF745A'
               }
               color="white"
               borderRadius={16}
@@ -116,14 +120,23 @@ export default function Home() {
           </Box>
         ))}
       </Stack>
-      <Stack direction={'row'} spacing={2}>
+      <Stack direction={'row'} spacing={2}> 
         <TextField
-          label="Message"
+          sx={{
+            backgroundColor: "white",
+          }}
+          label="I'd like to know about professor..."
           fullWidth
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <Button variant="contained" onClick={sendMessage}>
+        <Button variant="contained" onClick={sendMessage} 
+          sx={{
+            backgroundColor:"#2F5662",
+            "&:hover": {
+              backgroundColor: "#FF745A", // Prevent hover background color change
+            },
+          }}>
           Send
         </Button>
       </Stack>
